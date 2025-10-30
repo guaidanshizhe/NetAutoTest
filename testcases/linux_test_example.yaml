@@ -1,0 +1,52 @@
+test_case:
+  id: TC_LINUX_001
+  name: Linux系统监控测试
+  category: 操作系统
+  description: 测试Linux系统资源监控功能
+  
+  steps:
+    - action: 检查进程存在
+      params:
+        server: server1
+        process_name: sshd
+    
+    - action: 获取进程数量
+      params:
+        server: server1
+        process_name: sshd
+    
+    - action: 验证大于
+      params:
+        actual: ${last_result}
+        expected: 0
+        message: sshd进程数量应大于0
+    
+    - action: 获取CPU使用率
+      params:
+        server: server1
+    
+    - action: 验证小于
+      params:
+        actual: ${last_result}
+        expected: 90
+        message: CPU使用率应小于90%
+    
+    - action: 获取内存使用率
+      params:
+        server: server1
+    
+    - action: 验证小于
+      params:
+        actual: ${last_result}
+        expected: 90
+        message: 内存使用率应小于90%
+    
+    - action: 检查端口监听
+      params:
+        server: server1
+        port: 22
+    
+    - action: 验证为真
+      params:
+        actual: ${last_result}
+        message: SSH端口22应该在监听

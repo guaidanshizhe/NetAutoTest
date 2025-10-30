@@ -1,0 +1,14 @@
+environments:
+  test_env:
+    linux_servers:
+      - name: server1
+        ip: 172.29.162.205
+        port: 22
+        username: root
+        password: "!QAZ2wsx"
+
+
+global:
+  timeout: 30
+  retry: 3
+  log_level: INFO
