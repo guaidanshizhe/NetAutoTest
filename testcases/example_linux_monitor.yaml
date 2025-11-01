@@ -1,0 +1,62 @@
+test_case:
+  id: TC_LINUX_002
+  name: Linux系统资源监控
+  category: 系统监控
+  description: 监控Linux系统的CPU、内存、磁盘使用情况
+  
+  steps:
+    - action: 获取CPU使用率
+      params:
+        server: server1
+    
+    - action: 记录检查项
+      params:
+        item_name: CPU使用率检查
+        status: success
+        details: CPU使用率 ${last_result}%
+    
+    - action: 验证小于
+      params:
+        actual: ${last_result}
+        expected: 90
+        message: CPU使用率应小于90%
+    
+    - action: 获取内存使用率
+      params:
+        server: server1
+    
+    - action: 记录检查项
+      params:
+        item_name: 内存使用率检查
+        status: success
+        details: 内存使用率 ${last_result}%
+    
+    - action: 验证小于
+      params:
+        actual: ${last_result}
+        expected: 90
+        message: 内存使用率应小于90%
+    
+    - action: 获取磁盘使用率
+      params:
+        server: server1
+        path: /
+    
+    - action: 记录检查项
+      params:
+        item_name: 磁盘使用率检查
+        status: success
+        details: 磁盘使用率 ${last_result}%
+    
+    - action: 验证小于
+      params:
+        actual: ${last_result}
+        expected: 90
+        message: 磁盘使用率应小于90%
+    
+    - action: 生成检查报告
+      params:
+        report_name: linux_monitor
+        check_results:
+          server: server1
+          monitor_type: system_resources

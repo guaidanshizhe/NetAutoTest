@@ -1,0 +1,26 @@
+test_case:
+  id: TC_ADN_ENV_002
+  name: ADN多节点服务器环境批量检查
+  category: 环境检查
+  description: 批量检查所有ADN节点服务器的网络连通性和SSH端口
+  
+  steps:
+    - action: 记录检查项
+      params:
+        item_name: 开始批量环境检查
+        status: success
+        details: ADN多节点服务器环境批量检查开始
+    
+    - action: 批量检查ADN节点
+      params: {}
+    
+    - action: 生成检查报告
+      params:
+        report_name: adn_multi_nodes_check
+        check_results: ${last_result}
+    
+    - action: 记录检查项
+      params:
+        item_name: 批量检查完成
+        status: success
+        details: 所有节点检查已完成，报告已生成

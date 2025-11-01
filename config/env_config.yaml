@@ -1,14 +1,115 @@
+# ============================================================
+# ADN网络自动化测试平台 - 环境配置文件
+# ============================================================
+
 environments:
+  # ========== 测试环境 ==========
   test_env:
+    # Linux服务器配置
+    linux_servers:
+      - name: server1              # 服务器标识名称
+        ip: 172.29.162.205         # 服务器IP地址
+        port: 22                   # SSH端口
+        username: root             # SSH用户名
+        password: "!QAZ2wsx"       # SSH密码（特殊字符需要引号）
+        # key_file: /path/to/key   # 可选：使用密钥认证
+    
+    # 数据库配置
+    databases:
+      - name: adn_db               # 数据库标识名称
+        host: 172.29.162.205       # 数据库主机地址
+        port: 3306                 # 数据库端口
+        username: woof             # 数据库用户名
+        password: "!QAZ2wsx"       # 数据库密码
+        database: gocron           # 数据库名称
+    
+    # ADN节点配置（用于批量检查）
+    adn_nodes:
+      - name: adn_node1            # 节点名称
+        ip: 172.29.162.205         # 节点IP地址
+        ssh_port: 22               # SSH端口
+        # description: 主控节点    # 可选：节点描述
+      - name: adn_node2
+        ip: 192.168.1.101
+        ssh_port: 22
+      - name: adn_node3
+        ip: 192.168.1.102
+        ssh_port: 22
+  
+  # ========== 预发布环境 ==========
+  pre_prod_env:
+    # Linux服务器配置
     linux_servers:
       - name: server1
-        ip: 172.29.162.205
+        ip: 192.168.1.100
         port: 22
         username: root
-        password: "!QAZ2wsx"
+        password: "your_password"
+    
+    # 数据库配置
+    databases:
+      - name: adn_db
+        host: 192.168.1.100
+        port: 3306
+        username: root
+        password: "your_password"
+        database: adn
+    
+    # ADN节点配置
+    adn_nodes:
+      - name: adn_node1
+        ip: 192.168.1.100
+        ssh_port: 22
+      - name: adn_node2
+        ip: 192.168.1.101
+        ssh_port: 22
+  
+  # ========== 生产环境 ==========
+  # 注意：生产环境配置请谨慎修改，建议使用只读账号
+  prod_env:
+    # Linux服务器配置
+    linux_servers:
+      - name: server1
+        ip: 10.0.0.100
+        port: 22
+        username: admin            # 建议使用非root账号
+        password: "prod_password"
+    
+    # 数据库配置
+    databases:
+      - name: adn_db
+        host: 10.0.0.100
+        port: 3306
+        username: admin            # 建议使用只读账号
+        password: "prod_password"
+        database: adn
+    
+    # ADN节点配置
+    adn_nodes:
+      - name: adn_node1
+        ip: 10.0.0.100
+        ssh_port: 22
+      - name: adn_node2
+        ip: 10.0.0.101
+        ssh_port: 22
+      - name: adn_node3
+        ip: 10.0.0.102
+        ssh_port: 22
 
+# ========== 全局配置 ==========
+# 默认使用的环境（test_env/pre_prod_env/prod_env）
+default_env: test_env
 
+# 全局参数
 global:
-  timeout: 30
-  retry: 3
-  log_level: INFO
+  timeout: 30        # 默认超时时间（秒）
+  retry: 3           # 失败重试次数
+  log_level: INFO    # 日志级别（DEBUG/INFO/WARNING/ERROR）
+
+# ========== 配置说明 ==========
+# 1. 密码包含特殊字符（如!@#$）时必须用引号包裹
+# 2. 可以使用SSH密钥认证，配置key_file参数
+# 3. 生产环境建议使用只读账号，避免误操作
+# 4. ADN节点配置只需IP和SSH端口，数据库配置独立管理
+# 5. 添加新环境：复制现有环境配置，修改名称和参数
+# 6. 添加新节点：在adn_nodes列表中添加新项
