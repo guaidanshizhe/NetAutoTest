@@ -1,0 +1,33 @@
+# ADN自动化测试配置文件
+
+# 服务器配置
+servers:
+  adn_server:
+    ip: 172.29.162.205
+    port: 22
+    username: root
+    password: "!QAZ2wsx"
+
+# 数据库配置  
+databases:
+  adn_db:
+    host: 172.29.162.205
+    port: 3306
+    username: root
+    password: "!QAZ2wsx"
+    database: adn
+
+# ADN服务配置
+adn_services:
+  - container_name: adn-control
+  - container_name: adn-forward
+  - container_name: adn-monitor
+
+# 接口配置
+apis:
+  base_url: "http://172.29.162.205:8080"
+  
+# 工具配置
+tools:
+  rtnctl_path: "/usr/local/bin/rtnctl"
+  iperf_path: "/usr/bin/iperf3"

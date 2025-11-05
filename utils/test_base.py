@@ -6,9 +6,9 @@ import yaml
 from utils.ssh_client import SSHClient
 from adapters.linux_adapter import LinuxAdapter
 from adapters.database_adapter import DatabaseAdapter
-# 自动导入所有actions模块，确保AW已注册
-from actions import (linux_actions, verify_actions, network_actions, 
-                     database_actions, report_actions, batch_actions)
+# 自动导入所有AW模块，确保AW已注册
+from actions import (aw_linux, aw_verify, aw_network, 
+                     aw_database, aw_report, aw_batch, aw_recovery)
 from core.test_runner import TestRunner
 from core.case_parser import CaseParser
 from utils.logger import get_logger
@@ -44,7 +44,7 @@ def init_adapters(config_file='config/env_config.yaml', env_name=None):
         
         if ssh_client.connect():
             adapter = LinuxAdapter(ssh_client)
-            linux_actions.set_adapter(server_config['name'], adapter)
+            aw_linux.set_adapter(server_config['name'], adapter)
             logger.info(f"初始化Linux适配器: {server_config['name']}")
         else:
             logger.warning(f"服务器 {server_config['name']} ({server_config['ip']}) 连接失败，跳过该服务器")
@@ -58,7 +58,7 @@ def init_adapters(config_file='config/env_config.yaml', env_name=None):
             password=db_config['password'],
             database=db_config.get('database')
         )
-        database_actions.set_db_adapter(db_config['name'], db_adapter)
+        aw_database.set_db_adapter(db_config['name'], db_adapter)
         logger.info(f"初始化数据库适配器: {db_config['name']}")
 
 def run_test_case(case_file, title=None, env_name=None):

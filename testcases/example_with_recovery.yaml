@@ -1,0 +1,65 @@
+test_case:
+  id: TC_RECOVERY_001
+  name: 恢复机制示例测试
+  category: 示例
+  description: 演示自动恢复机制的使用
+  
+  setup:
+    - action: 记录检查项
+      params:
+        item_name: 开始恢复机制测试
+        status: success
+        details: 测试自动恢复功能
+  
+  steps:
+    # 这个AW有@keyword_recover装饰器，会自动入栈恢复信息
+    - action: 写入文件
+      params:
+        server: server1
+        file_path: /tmp/recovery_test_file.txt
+        content: "这是一个测试文件，用于验证恢复机制"
+    
+    - action: 验证为真
+      params:
+        actual: ${last_result}
+        message: 文件写入应该成功
+    
+    - action: 检查文件存在
+      params:
+        server: server1
+        file_path: /tmp/recovery_test_file.txt
+    
+    - action: 验证为真
+      params:
+        actual: ${last_result}
+        message: 文件应该存在
+    
+    - action: 读取文件
+      params:
+        server: server1
+        file_path: /tmp/recovery_test_file.txt
+    
+    - action: 验证包含
+      params:
+        actual: ${last_result}
+        expected: "测试文件"
+        message: 文件内容应该正确
+    
+    - action: 记录检查项
+      params:
+        item_name: 文件操作测试完成
+        status: success
+        details: 文件创建和读取测试通过
+  
+  teardown:
+    - action: 记录检查项
+      params:
+        item_name: 测试完成
+        status: success
+        details: 恢复机制将自动清理创建的文件
+    
+    - action: 生成检查报告
+      params:
+        report_name: recovery_test
+        check_results:
+          recovery_test_completed: true

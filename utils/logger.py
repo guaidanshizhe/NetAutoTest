@@ -1,13 +1,22 @@
-from loguru import logger
+import logging
 import sys
 from pathlib import Path
 
-log_path = Path(__file__).parent.parent / "logs"
-log_path.mkdir(exist_ok=True)
+# 创建logs目录
+log_dir = Path(__file__).parent.parent / "logs"
+log_dir.mkdir(exist_ok=True)
 
-logger.remove()
-logger.add(sys.stdout, level="INFO", format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> - <level>{message}</level>")
-logger.add(log_path / "test_{time:YYYY-MM-DD}.log", rotation="00:00", retention="30 days", level="DEBUG")
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s | %(levelname)-8s | %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler(log_dir / "test.log", encoding='utf-8')
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 def get_logger():
     return logger

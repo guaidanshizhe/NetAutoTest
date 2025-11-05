@@ -1,0 +1,48 @@
+test_case:
+  id: TC_ADN_DEMO_001
+  name: ADN自动化测试Demo
+  description: 完整的ADN自动化测试流程演示
+  
+  steps:
+    # 1. 检查连通性
+    - action: 检查服务器连通性
+      params: {}
+    
+    - action: 检查数据库连通性
+      params: {}
+    
+    # 2. 清理数据库
+    - action: 清理数据库表
+      params:
+        table_name: "test_table"
+        condition: "status='test'"
+    
+    # 3. 重启ADN服务
+    - action: 重启ADN容器
+      params: {}
+    
+    # 4. 调用API接口
+    - action: 调用API
+      params:
+        endpoint: "/api/v1/nodes"
+        method: "GET"
+    
+    - action: 调用API
+      params:
+        endpoint: "/api/v1/config"
+        method: "POST"
+        json_data:
+          node_id: "node001"
+          config_type: "routing"
+    
+    # 5. rtnctl查询
+    - action: 执行rtnctl查询
+      params:
+        query_params: "show route table"
+    
+    # 6. iperf打流测试
+    - action: 执行iperf测试
+      params:
+        server_ip: "192.168.1.100"
+        port: 5201
+        duration: 30
