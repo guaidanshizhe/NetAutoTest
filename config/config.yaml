@@ -1,33 +1,44 @@
+# ============================================================
 # ADN自动化测试配置文件
+# 使用说明: 修改下面的配置信息为你的实际环境
+# ============================================================
 
-# 服务器配置
+# 服务器配置 - 用于 SSH 连接和命令执行
 servers:
-  adn_server:
-    ip: 172.29.162.205
-    port: 22
-    username: root
-    password: "!QAZ2wsx"
+  adn_server:                    # 服务器名称（用于用例中引用）
+    ip: 172.29.162.205           # 修改为你的服务器IP地址
+    port: 22                     # SSH端口，一般不用改
+    username: root               # SSH用户名
+    password: "!QAZ2wsx"         # SSH密码（特殊字符需要引号）
 
-# 数据库配置  
+# 数据库配置 - 用于数据库连接和操作
 databases:
-  adn_db:
-    host: 172.29.162.205
-    port: 3306
-    username: root
-    password: "!QAZ2wsx"
-    database: adn
+  adn_db:                        # 数据库名称（用于用例中引用）
+    host: 172.29.162.205         # 修改为你的数据库地址
+    port: 3306                   # MySQL端口，一般不用改
+    username: root               # 数据库用户名
+    password: "!QAZ2wsx"         # 数据库密码
+    database: adn                # 修改为你的数据库名
 
-# ADN服务配置
+# ADN服务配置 - Docker容器名称列表
 adn_services:
-  - container_name: adn-control
-  - container_name: adn-forward
-  - container_name: adn-monitor
+  - container_name: adn-control  # 修改为你的容器名
+  - container_name: adn-forward  # 修改为你的容器名
+  - container_name: adn-monitor  # 修改为你的容器名
 
-# 接口配置
+# API接口配置 - REST API调用
 apis:
-  base_url: "http://172.29.162.205:8080"
+  base_url: "http://172.29.162.205:8080"  # 修改为你的API基础URL
   
-# 工具配置
+# 工具配置 - 命令行工具路径
 tools:
-  rtnctl_path: "/usr/local/bin/rtnctl"
-  iperf_path: "/usr/bin/iperf3"
+  rtnctl_path: "/usr/local/bin/rtnctl"     # 修改为你的rtnctl工具路径
+  iperf_path: "/usr/bin/iperf3"            # 修改为你的iperf3工具路径
+
+# ============================================================
+# 配置修改说明:
+# 1. 所有IP地址都需要改为你的实际环境
+# 2. 密码包含特殊字符时必须用引号包裹
+# 3. 容器名称和工具路径根据实际情况修改
+# 4. 可以添加多个服务器和数据库配置
+# ============================================================

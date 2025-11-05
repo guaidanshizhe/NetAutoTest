@@ -5,44 +5,67 @@ test_case:
   
   steps:
     # 1. 检查连通性
+    # 配置位置: config/config.yaml -> servers -> adn_server
     - action: 检查服务器连通性
-      params: {}
+      params:
+        server_name: adn_server  # 修改服务器信息请编辑 config/config.yaml
     
+    # 配置位置: config/config.yaml -> databases -> adn_db
     - action: 检查数据库连通性
-      params: {}
+      params:
+        db_name: adn_db  # 修改数据库信息请编辑 config/config.yaml
     
     # 2. 清理数据库
+    # 数据库连接使用上面的 adn_db 配置
     - action: 清理数据库表
       params:
-        table_name: "test_table"
-        condition: "status='test'"
+        db_name: adn_db
+        # 支持多种格式:
+        # 方式1: 字符串 - 单个表
+        # tables: "test_table"
+        # 方式2: 字符串 - 多个表(逗号分隔)
+        # tables: "table1,table2,table3"
+        # 方式3: 列表 - 多个表
+        # tables: ["table1", "table2", "table3"]
+        # 方式4: 列表 - 带条件的多个表
+        tables:
+          - name: "session_table"     # 修改为你的表名
+            condition: "status='test'"  # 清理条件，空字符串则清空整表
+          - name: "log_table"
+            condition: "create_time < '2024-01-01'"
+          - name: "temp_table"
+            condition: ""  # 清空整表
     
     # 3. 重启ADN服务
     - action: 重启ADN容器
-      params: {}
+      params:
+        server_name: adn_server  # 指定服务器
     
     # 4. 调用API接口
+    # 配置位置: config/config.yaml -> apis -> base_url
     - action: 调用API
       params:
-        endpoint: "/api/v1/nodes"
+        endpoint: "/api/v1/nodes"  # 修改为你的API路径
         method: "GET"
     
     - action: 调用API
       params:
-        endpoint: "/api/v1/config"
+        endpoint: "/api/v1/config"  # 修改为你的API路径
         method: "POST"
-        json_data:
+        json_data:  # 修改为你的JSON数据
           node_id: "node001"
           config_type: "routing"
     
     # 5. rtnctl查询
+    # 配置位置: config/config.yaml -> tools -> rtnctl_path
     - action: 执行rtnctl查询
       params:
-        query_params: "show route table"
+        query_params: "show route table"  # 修改为你的查询参数
     
     # 6. iperf打流测试
+    # 配置位置: config/config.yaml -> tools -> iperf_path
     - action: 执行iperf测试
       params:
-        server_ip: "192.168.1.100"
-        port: 5201
-        duration: 30
+        server_ip: "192.168.1.100"  # 修改为目标服务器IP
+        port: 5201  # iperf服务端口
+        duration: 30  # 测试时长(秒)
